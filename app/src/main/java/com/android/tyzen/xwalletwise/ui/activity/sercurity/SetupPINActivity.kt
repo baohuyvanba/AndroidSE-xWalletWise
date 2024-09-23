@@ -3,7 +3,6 @@ package com.android.tyzen.xwalletwise.ui.activity.sercurity
 import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -13,13 +12,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.tyzen.xwalletwise.R
+import com.android.tyzen.xwalletwise.model.user.setFirstTimeLaunch
 import com.android.tyzen.xwalletwise.ui.fragment.GlassMorphPinField
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
 import com.android.tyzen.xwalletwise.ui.fragment.NumbersPadSetupPin
@@ -213,6 +211,7 @@ fun SetupPinScreen(
                                 onNextClickToBiometric()
                             }
                             else {
+                                setFirstTimeLaunch(context = context, isFirstTime = false)
                                 onNextClickToInputPin()
                             }
                         }

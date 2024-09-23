@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -135,7 +136,7 @@ fun ProfileSetupScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally, )
                 {
-                    //Set up your profile text
+                    //"Set up your profile" text ---------------------------------------------------
                     AnimatedGradientText(
                         text = "Set Up Your Profile",
                         align = TextAlign.Center,
@@ -159,13 +160,15 @@ fun ProfileSetupScreen(
                         singleLine = true,
                         isError = false,
                         enabled = true,
-                        focusedBorderColor   = Color.White.copy(alpha = 0.5f),
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                        disabledBorderColor  = Color.White.copy(alpha = 0.5f),
-                        focusedLabelColor    = Color.White,
-                        unfocusedLabelColor  = Color.White,
-                        disabledLabelColor   = Color.White,
-                        cursorColor          = Color.White.copy(alpha = 0.5f),
+                        textFieldColors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor   = Color.White.copy(alpha = 0.5f),
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
+                            disabledBorderColor  = Color.White.copy(alpha = 0.5f),
+                            focusedLabelColor    = Color.White,
+                            unfocusedLabelColor  = Color.White,
+                            disabledLabelColor   = Color.White,
+                            cursorColor          = Color.White.copy(alpha = 0.5f),
+                        ),
                         formTextStyle = TextStyle(
                             color = Color.White.copy(alpha = 0.8f),
                         ),
@@ -220,13 +223,15 @@ fun ProfileSetupScreen(
                                 singleLine = true,
                                 isError = false,
                                 enabled = true,
-                                focusedBorderColor   = Color.White.copy(alpha = 0.5f),
-                                unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                                disabledBorderColor  = Color.White.copy(alpha = 0.5f),
-                                focusedLabelColor    = Color.White.copy(alpha = 0.8f),
-                                unfocusedLabelColor  = Color.White.copy(alpha = 0.8f),
-                                disabledLabelColor   = Color.White.copy(alpha = 0.8f),
-                                cursorColor          = Color.White.copy(alpha = 0.5f),
+                                textFieldColors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor   = Color.White.copy(alpha = 0.5f),
+                                    unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
+                                    disabledBorderColor  = Color.White.copy(alpha = 0.5f),
+                                    focusedLabelColor    = Color.White,
+                                    unfocusedLabelColor  = Color.White,
+                                    disabledLabelColor   = Color.White,
+                                    cursorColor          = Color.White.copy(alpha = 0.5f),
+                                ),
                                 formTextStyle = TextStyle(
                                     color = Color.White.copy(alpha = 0.8f),
                                 ),
@@ -244,13 +249,15 @@ fun ProfileSetupScreen(
                         singleLine = true,
                         isError = false,
                         enabled = true,
-                        focusedBorderColor   = Color.White.copy(alpha = 0.5f),
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                        disabledBorderColor  = Color.White.copy(alpha = 0.5f),
-                        focusedLabelColor    = Color.White.copy(alpha = 0.8f),
-                        unfocusedLabelColor  = Color.White.copy(alpha = 0.8f),
-                        disabledLabelColor   = Color.White.copy(alpha = 0.8f),
-                        cursorColor          = Color.White.copy(alpha = 0.5f),
+                        textFieldColors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor   = Color.White.copy(alpha = 0.5f),
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
+                            disabledBorderColor  = Color.White.copy(alpha = 0.5f),
+                            focusedLabelColor    = Color.White,
+                            unfocusedLabelColor  = Color.White,
+                            disabledLabelColor   = Color.White,
+                            cursorColor          = Color.White.copy(alpha = 0.5f),
+                        ),
                         formTextStyle = TextStyle(
                             color = Color.White.copy(alpha = 0.8f),
                         ),

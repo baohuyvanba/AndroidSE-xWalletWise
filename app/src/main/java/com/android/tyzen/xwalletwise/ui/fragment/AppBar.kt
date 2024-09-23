@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
@@ -313,6 +314,51 @@ fun WalletWiseFloatingTopBar(
             }
         )
     }
+}
+
+/**
+ * View Detail Top App Bar =========================================================================
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WalletWiseViewDetailTopAppBar(
+    title: String,
+    navigationButton: @Composable (() -> Unit)? = null,
+    onNavigationClick: () -> Unit = {}, )
+{
+    val configuration = LocalConfiguration.current
+    val screenHeight  = configuration.screenHeightDp
+
+    TopAppBar(
+        modifier = Modifier
+            .height((screenHeight*0.06).dp)
+            .fillMaxWidth(),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.White,
+            scrolledContainerColor = Color.White,
+            navigationIconContentColor = Color.Black,
+        ),
+        title = {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,)
+            {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                )
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = onNavigationClick)
+            {
+                navigationButton?.invoke() ?: Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+            }
+        },
+    )
 }
 
 /**

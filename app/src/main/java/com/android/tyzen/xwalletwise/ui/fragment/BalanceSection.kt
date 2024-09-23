@@ -39,14 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
 import com.android.tyzen.xwalletwise.util.formatBalance
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewGlassmorphicBox() {
-    WalletWiseTheme {
-        GlassmorphicBox()
-    }
-}
-
+//PREVIEW ONLY -------------------------------------------------------------------------------------
 @Composable
 fun GlassmorphicBox() {
     Box(
@@ -184,26 +177,11 @@ fun BalanceSection(
 /**
  * BALANCE BOX =====================================================================================
  */
-@Preview(showBackground = true)
-@Composable
-fun PreviewBalanceBox() {
-    WalletWiseTheme {
-        BalanceBox(
-            amount = 1000000.0,
-            label = "Income",
-            icon = Icons.Default.KeyboardArrowDown,
-            gradientColors = listOf(Color(0xFF6E8EFB), Color(0xFFA777E3)),
-            textColor = Color.DarkGray,
-            onClick = {})
-    }
-}
-
 @Composable
 fun BalanceBox(
     amount: Double,
     label: String,
     icon: ImageVector,
-    gradientColors: List<Color>,
     textColor: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier, )
@@ -294,10 +272,6 @@ fun DetailedBalanceSection(
             amount = incomeAmount,
             label = "Income",
             icon = Icons.Default.KeyboardArrowDown,
-            gradientColors = listOf(
-                Color(0xFF93F9B9).copy(alpha = 0.3f),
-                Color(0xFF1D976C).copy(alpha = 0.3f),
-            ),
             textColor = Color.White,
             modifier = Modifier.weight(1f),
             onClick = onIncomeClick
@@ -310,10 +284,6 @@ fun DetailedBalanceSection(
             amount = outcomeAmount,
             label = "Expense",
             icon = Icons.Default.KeyboardArrowUp,
-            gradientColors = listOf(
-                Color(0xFF93F9B9).copy(alpha = 0.3f),
-                Color(0xFF1D976C).copy(alpha = 0.3f),
-            ),
             textColor = Color.White,
             modifier = Modifier.weight(1f),
             onClick = onOutcomeClick
