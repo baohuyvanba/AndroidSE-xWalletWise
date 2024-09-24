@@ -62,6 +62,7 @@ import com.android.tyzen.xwalletwise.ui.fragment.FABTransaction
 import com.android.tyzen.xwalletwise.ui.fragment.FABTransactionCircle
 import com.android.tyzen.xwalletwise.ui.fragment.FAButtonCircle
 import com.android.tyzen.xwalletwise.ui.fragment.NormalIconButton
+import com.android.tyzen.xwalletwise.ui.fragment.QuickAccessBar
 import com.android.tyzen.xwalletwise.ui.viewmodel.HomeUiState
 import com.android.tyzen.xwalletwise.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.first
@@ -296,55 +297,6 @@ fun HomeScreen(
                 }
             }
         }
-    }
-}
-
-/**
- * QUICK ACCESS Bar ================================================================================
- */
-@Composable
-fun QuickAccessBar(
-    onAnalysisClick: () -> Unit = {},
-    onAIChatClick: () -> Unit = {},
-    onRemindClick: () -> Unit = {})
-{
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically, )
-    {
-        //Analysis Button
-        NormalIconLabelButton(
-            icon = painterResource(R.drawable.ic_analytics_filled),
-            text = "Analysis",
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
-            ),
-            onClick = onAnalysisClick
-        )
-
-        //AI Chat Button (Icon Only)
-        NormalIconButton(
-            contentDescription = "AI Chat",
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
-            ),
-            onClick = onAIChatClick,
-            icon = painterResource(R.drawable.ic_chat_finance),
-        )
-
-        //Remind Button
-        NormalIconLabelButton(
-            icon = painterResource(R.drawable.ic_remind_event),
-            text = "Remind",
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
-            ),
-            onClick = onRemindClick
-        )
     }
 }
 
