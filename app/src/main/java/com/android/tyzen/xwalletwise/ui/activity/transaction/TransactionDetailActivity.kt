@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -51,6 +52,7 @@ import com.android.tyzen.xwalletwise.ui.fragment.FABViewDetailExtended
 import com.android.tyzen.xwalletwise.ui.fragment.FABViewDetailIcon
 import com.android.tyzen.xwalletwise.ui.fragment.FAButton
 import com.android.tyzen.xwalletwise.ui.fragment.FormTextField
+import com.android.tyzen.xwalletwise.ui.fragment.TransactionDetailField
 import com.android.tyzen.xwalletwise.ui.fragment.TransactionTypeChipsGroup
 import com.android.tyzen.xwalletwise.ui.fragment.WalletWiseTopAppBar
 import com.android.tyzen.xwalletwise.ui.fragment.WalletWiseViewDetailTopAppBar
@@ -114,17 +116,21 @@ fun ViewTransactionScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     var showDateTimePicker by remember { mutableStateOf(false) }
 
-    val backgroundColor =
-        if (transactionDetailUiState.transactionType == TransactionType.INCOME)
-            listOf(
-                Color(0xFFFAFFD1),
-                Color(0xFFA1FFCE)
-            )
-        else //transactionDetailUiState.transactionType == TransactionType.OUTCOME
-            listOf(
-                Color(0xFFe1eec3).copy(0.5f),
-                Color(0xFFf05053).copy(0.6f)
-            )
+    val backgroundColor: List<Color>
+    val balanceColor: Color
+    if (transactionDetailUiState.transactionType == TransactionType.INCOME) {
+        backgroundColor = listOf(
+            Color(0xFFFAFFD1),
+            Color(0xFFA1FFCE)
+        )
+        balanceColor = Color(0xFF59C173)
+    } else { //TransactionType.OUTCOME
+        backgroundColor = listOf(
+            Color(0xFFe1eec3).copy(0.5f),
+            Color(0xFFf05053).copy(0.6f)
+        )
+        balanceColor = Color(0xFFfd746c).copy(0.8f)
+    }
 
     Scaffold(
         topBar = {
@@ -168,8 +174,7 @@ fun ViewTransactionScreen(
                     contentDescription = "Save Change",
                 )
             }
-        },
-        floatingActionButtonPosition = FabPosition.End, )
+        },)
     { innerPadding ->
         Box(
             modifier = Modifier
@@ -188,18 +193,16 @@ fun ViewTransactionScreen(
             Column(
                 modifier = Modifier.padding(24.dp),)
             {
-                //AMOUNT ---------------------------------------------------------------------------
+                //BALANCE AMOUNT -------------------------------------------------------------------
                 BalanceAmountField(
                     value = formatBalance(transactionDetailUiState.transactionAmount * 1.0),
                     onValueChange = {
                         transactionDetailViewModel.onTransactionAmountChanged(formatDouble(it))
                     },
                     readOnly = readOnly,
-                    balanceColor = Color(0xFFfd746c).copy(0.8f),
+                    balanceColor = balanceColor,
                     currency = currency,
-                    currencyBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                 )
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 //TRANSACTION TYPE -----------------------------------------------------------------
@@ -213,52 +216,46 @@ fun ViewTransactionScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 /**
-                 * CATEGORY & TRANSACTION NAME =====================================================
+                 * TRANSACTION TITLE ===============================================================
                  */
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween, )
-                {
-                    //CATEGORY ICON ----------------------------------------------------------------
-                    IconButton(
-                        onClick = { if (!readOnly) showBottomSheet = true },
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                shape = CircleShape
-                            ),
-                    ) {
-                        Image(
-                            painter = painterResource(
-                                id = categoryIconsList[transactionDetailUiState.category.icon]
-                                    ?: R.drawable.ic_category_other
-                            ),
-                            contentDescription = "Category Icon: ${transactionDetailUiState.category.icon}",
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.weight(0.03f))
-
-                    //TRANSACTION NAME -------------------------------------------------------------
-                    Box(
-                        modifier = Modifier.weight(0.87f), )
-                    {
-                        FormTextField(
-                            label = "Title",
-                            value = transactionDetailUiState.transactionTitle,
-                            onValueChange = {
-                                transactionDetailViewModel.onTransactionTitleChanged(it)
-                            },
-                            readOnly = readOnly,
-                        )
-                    }
-                }
-
+                TransactionDetailField(
+                    label = "Title",
+                    value = transactionDetailUiState.transactionTitle,
+                    onValueChange = {
+                        transactionDetailViewModel.onTransactionTitleChanged(it)
+                    },
+                    modifier = Modifier,
+                    keyboardOptions = KeyboardOptions.Default,
+                    readOnly = readOnly,
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 
-                //DATE & TIME ----------------------------------------------------------------------
-                FormTextField(
+                /**
+                 * CATEGORY ========================================================================
+                 */
+                IconButton(
+                    onClick = { if (!readOnly) showBottomSheet = true },
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = CircleShape
+                        ),
+                ) {
+                    Image(
+                        painter = painterResource(
+                            id = categoryIconsList[transactionDetailUiState.category.icon]
+                                ?: R.drawable.ic_category_other
+                        ),
+                        contentDescription = "Category Icon: ${transactionDetailUiState.category.icon}",
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                /**
+                 * DATE & TIME =====================================================================
+                 */
+                TransactionDetailField(
                     label = "Date & Time",
                     value = formatDate(transactionDetailUiState.transactionDate),
                     trailingIcon = {
@@ -286,11 +283,15 @@ fun ViewTransactionScreen(
                     )
                 }
 
-                //DESCRIPTION ----------------------------------------------------------------------
-                FormTextField(
+                /**
+                 * DESCRIPTION =====================================================================
+                 */
+                TransactionDetailField(
                     label = "Description",
                     value = transactionDetailUiState.transactionDescription ?: "",
-                    onValueChange = { transactionDetailViewModel.onTransactionDescriptionChanged(it) },
+                    onValueChange = {
+                        transactionDetailViewModel.onTransactionDescriptionChanged(it)
+                    },
                     readOnly = readOnly,
                 )
             }

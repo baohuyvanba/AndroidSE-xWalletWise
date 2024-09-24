@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.tyzen.xwalletwise.R
+import com.android.tyzen.xwalletwise.model.user.UserPreferences
 import com.android.tyzen.xwalletwise.model.user.setFirstTimeLaunch
 import com.android.tyzen.xwalletwise.ui.fragment.GlassMorphPinField
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
@@ -54,6 +55,7 @@ fun PreviewSetupPinScreen()
 @Composable
 fun SetupPinScreen(
     pinViewModel: PinViewModel = hiltViewModel(),
+    userPreferences: UserPreferences = hiltViewModel(),
     onNextClickToBiometric: () -> Unit,
     onNextClickToInputPin : () -> Unit, )
 {
@@ -61,6 +63,8 @@ fun SetupPinScreen(
 
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
+    val screenHeight  = configuration.screenHeightDp
+    val screenWidth   = configuration.screenWidthDp
 
     val biometricManager = BiometricManager.from(context)
     val isBiometricSupported = biometricManager.canAuthenticate(BIOMETRIC_STRONG) == BIOMETRIC_SUCCESS
@@ -68,14 +72,10 @@ fun SetupPinScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     keyboardController?.hide()
 
-    val screenHeight  = configuration.screenHeightDp
-    val screenWidth   = configuration.screenWidthDp
-
     val isPinsMatched = pinUiState.pin.length == 4 && pinUiState.confirmPin.length == 4 && pinUiState.pin == pinUiState.confirmPin
-
     Scaffold(
         modifier = Modifier.fillMaxSize(), )
-    {innerPadding ->
+    { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -84,7 +84,7 @@ fun SetupPinScreen(
             //Background Image ---------------------------------------------------------------------
             Image(
                 painter = painterResource(R.drawable.bg_userprofile),
-                contentDescription = "PIN setup background",
+                contentDescription = "PIN Setup background",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(), )
 
@@ -211,6 +211,7 @@ fun SetupPinScreen(
                                 onNextClickToBiometric()
                             }
                             else {
+                                userPreferences.setFirstTimeLaunch(false)
                                 setFirstTimeLaunch(context = context, isFirstTime = false)
                                 onNextClickToInputPin()
                             }

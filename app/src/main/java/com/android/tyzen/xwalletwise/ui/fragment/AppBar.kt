@@ -1,5 +1,6 @@
 package com.android.tyzen.xwalletwise.ui.fragment
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,9 +34,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -44,6 +47,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 import com.android.tyzen.xwalletwise.R
@@ -365,71 +369,67 @@ fun WalletWiseViewDetailTopAppBar(
  * Floating Bottom Bar =============================================================================
  */
 @Composable
-fun GlassIconButton(
-    iconSize: Int = 80,
+fun GlassButtonFloatingBottomBar(
     icon: ImageVector,
     title: String,
     contentDescription: String,
     isSelected: Boolean,
     onClick: () -> Unit, )
 {
-    Box(
-        modifier = Modifier.size(iconSize.dp), )
-    {
-        IconButton(
-            modifier = Modifier.size(iconSize.dp),
-            onClick = onClick, )
-        {
-            Box(
-                modifier = Modifier
-                    .size(iconSize.times(0.75).dp)
-                    .background(
-                        brush = if (isSelected) Brush.radialGradient(
-                            colors = listOf(
-                                Color.White.copy(alpha = 0.1f),
-                                Color.White.copy(alpha = 0.04f),
-                                Color.White.copy(alpha = 0.01f),
-                                Color.Transparent
-                            ),
-                            radius = 150f
-                        )
-                        else Brush.linearGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.Transparent
-                            )
-                        ),
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center, )
-            {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = contentDescription,
-                    tint =
-                        if (isSelected)
-                            Color(0xFF196B52)
-                        else
-                            Color(0xFF196B52).copy(alpha = 0.8f),
-                    modifier = Modifier
-                        .padding(bottom =
-                            if (isSelected)
-                                16.dp
-                            else
-                                0.dp),
-                )
+    var iconColor = Color(0xFF1C9516)
+    val iconSize  = 80
+    val bottomPadding: Dp
+    val glowRadius by animateFloatAsState(targetValue = if (isSelected) 50f else 1f, label = "glass_floating_icon_glow")
+    val brushGradient: Brush = Brush.radialGradient(
+        colors = listOf(
+            Color.White.copy(alpha = if (isSelected) 0.5f else 0f),
+            Color.Transparent
+        ),
+        radius = glowRadius
+    )
 
-                if (isSelected) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                        color = Color(0xFF196B52),
-                        modifier = Modifier.padding(top = 28.dp)
-                    )
-                }
+    if (isSelected) {
+        bottomPadding = 16.dp
+    }
+    else {
+        iconColor = iconColor.copy(alpha = 0.8f)
+        bottomPadding = 0.dp
+    }
+
+    IconButton(
+        modifier = Modifier.size(iconSize.dp),
+        onClick = onClick, )
+    {
+        Box(
+            modifier = Modifier
+                .size(iconSize.times(0.75).dp)
+                .background(
+                    brush = brushGradient,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center, )
+        {
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription,
+                tint = iconColor,
+                modifier = Modifier.padding(bottom = bottomPadding)
+            )
+
+            if (isSelected) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize   = MaterialTheme.typography.bodySmall.fontSize.times(1.1f)
+                    ),
+                    color = iconColor,
+                    modifier = Modifier.padding(top = 24.dp)
+                )
             }
         }
 
+        //Bottom Light -----------------------------------------------------------------------------
         if (isSelected) {
             Column(
                 modifier = Modifier
@@ -461,53 +461,50 @@ fun GlassIconButton(
 
 @Composable
 fun WalletWiseFloatingBottomBar(
-    roundedCornerShape: RoundedCornerShape = RoundedCornerShape(30.dp),
     selectedTab: Int,
     onTabSelected: (Int) -> Unit, )
 {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp
 
-    //Max Width x 0.08*Height
+    //Max Width x 0.06Height
     Box(
         modifier = Modifier
             .height((screenHeight * 0.06).dp)
-            .fillMaxWidth()
+            .fillMaxWidth(fraction = 0.96f)
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF1D976C).copy(alpha = 0.2f),
-                        Color(0xFF93F9B9).copy(alpha = 0.2f),
+                        Color(0xFF9EE9D8).copy(alpha = 0.3f),
+                        Color(0xFF91E9CF).copy(alpha = 0.3f),
                     )
                 ),
-                shape = roundedCornerShape,
+                shape = CircleShape,
             )
-            .clip(roundedCornerShape),
+            .clip(CircleShape),
         contentAlignment = Alignment.Center, )
     {
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .clip(roundedCornerShape)
-                .background(Color.White.copy(alpha = 0.2f))
+                .clip(CircleShape)
+                .background(Color.White.copy(alpha = 0.0f))
                 .border(
                     width = 1.dp,
-                    color = Color.Gray.copy(alpha = 0.5f),
-                    shape = roundedCornerShape
+                    color = Color(0xFF196B52).copy(0.5f),
+                    shape = CircleShape
                 )
                 .padding(8.dp),
         )
 
         Row(
-            modifier = Modifier
-                .matchParentSize()
-                .background(color = Color.Transparent),
+            modifier = Modifier.matchParentSize(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically, )
         {
             //OVERVIEW: 1
-            GlassIconButton(
-                icon = Icons.Default.List,
+            GlassButtonFloatingBottomBar(
+                icon = Icons.Default.Menu,
                 title = "Overview",
                 contentDescription = "Overview",
                 isSelected = selectedTab == 1,
@@ -516,7 +513,7 @@ fun WalletWiseFloatingBottomBar(
                 }
             )
             //HOME: 0
-            GlassIconButton(
+            GlassButtonFloatingBottomBar(
                 icon = Icons.Default.Home,
                 title = "Home",
                 contentDescription = "Home",
@@ -526,7 +523,7 @@ fun WalletWiseFloatingBottomBar(
                 }
             )
             //SETTINGS: 2
-            GlassIconButton(
+            GlassButtonFloatingBottomBar(
                 icon = Icons.Default.Settings,
                 title = "Settings",
                 contentDescription = "Settings",
@@ -537,5 +534,6 @@ fun WalletWiseFloatingBottomBar(
             )
         }
     }
+    Spacer(modifier = Modifier.height(4.dp).fillMaxWidth())
 }
 

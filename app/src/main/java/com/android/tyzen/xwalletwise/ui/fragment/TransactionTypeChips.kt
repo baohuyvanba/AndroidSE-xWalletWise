@@ -68,7 +68,7 @@ fun TransactionTypeChipsGroup(
             TransactionTypeChip(
                 text = "Income",
                 painterId = R.drawable.ic_transaction_income,
-                iconColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.8f),
+                iconColor = Color(0xFF59C173),
                 isSelected = initialType == TransactionType.INCOME,
                 onTransactionTypeSelect = {
                     onTransactionTypeSet(TransactionType.INCOME)

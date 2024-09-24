@@ -3,7 +3,6 @@ package com.android.tyzen.xwalletwise.ui.activity
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -34,6 +32,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -45,11 +44,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.tyzen.xwalletwise.R
 import com.android.tyzen.xwalletwise.model.user.UserPreferences
 
@@ -58,10 +58,10 @@ import com.android.tyzen.xwalletwise.ui.fragment.DetailedBalanceSection
 import com.android.tyzen.xwalletwise.ui.fragment.NormalIconLabelButton
 import com.android.tyzen.xwalletwise.ui.activity.category.CategoryCard
 import com.android.tyzen.xwalletwise.ui.activity.transaction.TransactionCard
-import com.android.tyzen.xwalletwise.ui.fragment.FAButton
+import com.android.tyzen.xwalletwise.ui.fragment.FABTransaction
+import com.android.tyzen.xwalletwise.ui.fragment.FABTransactionCircle
 import com.android.tyzen.xwalletwise.ui.fragment.FAButtonCircle
 import com.android.tyzen.xwalletwise.ui.fragment.NormalIconButton
-import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
 import com.android.tyzen.xwalletwise.ui.viewmodel.HomeUiState
 import com.android.tyzen.xwalletwise.ui.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.first
@@ -76,23 +76,24 @@ import kotlin.math.sin
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    userPreferences: UserPreferences = hiltViewModel(),
-    homeViewModel: HomeViewModel = hiltViewModel(),
-    //navigate
+    //transaction
     onNavigateToTransactionList: () -> Unit = {},
     onNavigateToTransactionDetail: (Long) -> Unit = {},
+    //category
     onNavigateToCategoryList: () -> Unit = {},
     onNavigateToCategoryDetail: (Int) -> Unit = {},
-    onClickAddManual: () -> Unit = {},
-    onClickAddOCR: () -> Unit = {},
-    onClickAddText: () -> Unit = {},
     quickAccessOnAnalysisClick:() -> Unit = {},
     quickAccessOnAIChatClick: () -> Unit = {},
     quickAccessOnRemindClick: () -> Unit = {},)
 {
+    val userPreferences: UserPreferences = hiltViewModel()
+    val homeViewModel: HomeViewModel = hiltViewModel()
     val homeUiState = homeViewModel.homeUiState
-    val scope = rememberCoroutineScope()
 
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
+
+    val scope = rememberCoroutineScope()
     var currency by rememberSaveable { mutableStateOf("") }
     LaunchedEffect(key1 = Unit) {
         scope.launch {
@@ -102,7 +103,7 @@ fun HomeScreen(
 
     //FAB animation
     val expandedState = remember { mutableStateOf(false) }
-    var rotationAngle by remember { mutableStateOf(0f) }
+    var rotationAngle by remember { mutableFloatStateOf(0f) }
     val numExpandedFab = 3
     val angleIncrement = 45f
     LaunchedEffect(expandedState.value) {
@@ -115,24 +116,19 @@ fun HomeScreen(
     }
 
     Scaffold(
-        modifier = Modifier.background(Color.Transparent),
+        modifier = Modifier
+            .background(Color.Transparent)
+            .padding(bottom = (screenHeight * 0.06).dp),
         floatingActionButton = {
-            FAButton(
-                modifier = Modifier.offset(y = (-48).dp),
-                onClick = {
+            FABTransaction(
+                modifier = Modifier,
+                onClick  = {
                     expandedState.value = !expandedState.value
                 },
-                buttonColor =
-                    if (!expandedState.value)
-                        MaterialTheme.colorScheme.primary
-                    else
-                        MaterialTheme.colorScheme.secondary,
-                icon =
-                    if (!expandedState.value)
-                        Icons.Default.Add
-                    else
-                        Icons.Default.Close,
-                contentDescription = "Add Transaction"
+                icon = if (!expandedState.value) Icons.Default.Add else Icons.Default.Close,
+                containerColor = Color(0xFF91E9CF).copy(alpha = 0.3f),
+                borderColor = Color(0xFF196B52).copy(0.5f),
+                contentDescription = "Add Transaction",
             )
 
             if (expandedState.value)
@@ -140,7 +136,6 @@ fun HomeScreen(
                 for (i in 0 until numExpandedFab)
                 {
                     val fabAngle = rotationAngle + (i + 1) * angleIncrement
-                    val fabIndex = i
 
                     Box(
                         modifier = Modifier
@@ -149,33 +144,42 @@ fun HomeScreen(
                                     targetValue = 100 * sin(Math.toRadians(fabAngle.toDouble())).toFloat(),
                                     animationSpec = tween(durationMillis = 300), label = "", ).value.dp,
                                 y = animateFloatAsState(
-                                    targetValue = 100 * cos(Math.toRadians(fabAngle.toDouble())).toFloat() - 48,
+                                    targetValue = 100 * cos(Math.toRadians(fabAngle.toDouble())).toFloat(),
                                     animationSpec = tween(durationMillis = 300), label = "", ).value.dp
                             ),
-                    )
-                    {
-                        when (fabIndex)
-                        {
-                            0 -> FAButtonCircle( // Manual
-                                onClick = { onClickAddManual() },
+                    ) {
+                        when (i) {
+                            0 -> FABTransactionCircle(
+                                modifier = Modifier.rotate(fabAngle),
+                                onClick = {
+                                    onNavigateToTransactionDetail.invoke(-1)
+                                },
                                 icon = Icons.Default.Edit,
-                                buttonColor = MaterialTheme.colorScheme.primary,
+                                containerColor = Color(0xFF91E9CF).copy(alpha = 0.3f),
+                                borderColor = Color(0xFF196B52).copy(0.5f),
                                 contentDescription = "Manual",
-                                modifier = Modifier.rotate(fabAngle), )
+                            )
+                            1 -> FABTransactionCircle(
+                                modifier = Modifier.rotate(fabAngle),
+                                onClick = {
+                                    onNavigateToTransactionDetail.invoke(-2)
+                                },
+                                icon = ImageVector.vectorResource(R.drawable.ic_receipt_scan),
+                                containerColor = Color(0xFF91E9CF).copy(alpha = 0.3f),
+                                borderColor = Color(0xFF196B52).copy(0.5f),
+                                contentDescription = "OCR",
+                            )
 
-                            1 -> FAButtonCircle( // OCR
-                                onClick = { onClickAddOCR() },
-                                iconResId = R.drawable.ic_receipt_scan,
-                                buttonColor = MaterialTheme.colorScheme.primary,
-                                contentDescription = "Manual",
-                                modifier = Modifier.rotate(fabAngle), )
-
-                            2 -> FAButtonCircle( // Text
-                                onClick = { onClickAddText() },
-                                iconResId = R.drawable.ic_transaction_text,
-                                buttonColor = MaterialTheme.colorScheme.primary,
-                                contentDescription = "Manual",
-                                modifier = Modifier.rotate(fabAngle), )
+                            2 -> FABTransactionCircle(
+                                modifier = Modifier.rotate(fabAngle),
+                                onClick = {
+                                    onNavigateToTransactionDetail.invoke(-3)
+                                },
+                                icon = ImageVector.vectorResource(R.drawable.ic_transaction_text),
+                                containerColor = Color(0xFF91E9CF).copy(alpha = 0.3f),
+                                borderColor = Color(0xFF196B52).copy(0.5f),
+                                contentDescription = "Text",
+                            )
                         }
                     }
                 }
@@ -218,7 +222,7 @@ fun HomeScreen(
                         currencyBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
                     )
                 }
-                //DETAILED BALANCE SECTION BOXES ---------------------------------------------------
+                //DETAILED BALANCE -----------------------------------------------------------------
                 item {
                     DetailedBalanceSection(
                         incomeAmount  = homeUiState.totalIncome,
@@ -296,7 +300,7 @@ fun HomeScreen(
 }
 
 /**
- * Quick Access Bar ================================================================================
+ * QUICK ACCESS Bar ================================================================================
  */
 @Composable
 fun QuickAccessBar(
@@ -345,7 +349,7 @@ fun QuickAccessBar(
 }
 
 /**
- * List Shortcuts ==================================================================================
+ * SHORTCUTS View ==================================================================================
  */
 @Composable
 fun TransactionShortCutView(
@@ -375,16 +379,14 @@ fun TransactionShortCutView(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,)
         {
-            if (homeUiState.transactions.isEmpty())
-            {
+            if (homeUiState.transactions.isEmpty()) {
                 Text(
                     text = "No recent transactions",
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            else
-            {
+            else {
                 Column {
                     homeUiState.transactions.take(3).forEach { transaction ->
                         TransactionCard(

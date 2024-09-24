@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.android.tyzen.xwalletwise.R
+import com.android.tyzen.xwalletwise.model.user.UserPreferences
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
 import com.finance.android.walletwise.ui.fragment.AnimatedGradientText
 import com.android.tyzen.xwalletwise.ui.fragment.DropDownMenu
@@ -55,6 +56,7 @@ fun PreviewProfileSetupScreen() {
 @Composable
 fun ProfileSetupScreen(
     userProfileViewModel: UserProfileViewModel = hiltViewModel(),
+    userPreferences: UserPreferences = hiltViewModel(),
     navigateToPINSetup: () -> Unit = {}, )
 {
     val userProfileUiState = userProfileViewModel.userProfileUiState
@@ -273,6 +275,7 @@ fun ProfileSetupScreen(
                                 it,
                                 currencyPosition(it)
                             )
+                            userPreferences.setCurrency(it)
                         },
                         focusedBorderColor   = Color.White.copy(alpha = 0.5f),
                         unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
@@ -298,9 +301,7 @@ fun ProfileSetupScreen(
                 }
             }
 
-            Spacer(
-                modifier = Modifier
-                    .height((screenHeight*0.1).dp))
+            Spacer(modifier = Modifier.height((screenHeight*0.1).dp))
 
             /**
              * BUTTON: Next ------------------------------------------------------------------------

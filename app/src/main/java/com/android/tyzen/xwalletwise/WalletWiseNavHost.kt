@@ -8,29 +8,21 @@ import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleOut
-import androidx.compose.compiler.plugins.kotlin.ComposeCallableIds.remember
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.android.tyzen.xwalletwise.model.user.UserPreferences
 import com.android.tyzen.xwalletwise.model.user.isFirstTimeLaunch
 
 //UI
@@ -45,10 +37,6 @@ import com.android.tyzen.xwalletwise.ui.activity.sercurity.SetupBiometricsScreen
 import com.android.tyzen.xwalletwise.ui.activity.user.ProfileSetupScreen
 import com.android.tyzen.xwalletwise.ui.activity.sercurity.SetupPinScreen
 import com.android.tyzen.xwalletwise.ui.activity.user.WelcomeScreen
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 //Control application navigation with NavHost
 @Composable
@@ -56,7 +44,7 @@ fun WalletWiseNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier, )
 {
-    //Setup Start Screen
+    //Setup: Start Screen
     val context = LocalContext.current
     val startDestination by rememberSaveable { mutableStateOf(
         if (isFirstTimeLaunch(context)) {
@@ -81,19 +69,16 @@ fun WalletWiseNavHost(
         composable(
             route = welcomeScreen.route,
             enterTransition = {
-                return@composable fadeIn(tween(300))  //Open Animation
+                return@composable fadeIn(tween(300))
             },
             exitTransition = {
-                return@composable fadeOut(tween(300)) //Close Animation
-            },
-            popEnterTransition = {
-                return@composable slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(300))       //Re-open Animation
-            }, )
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
+                )
+            })
         {
             WelcomeScreen(
-                onStartPress = {
+                onStartClick = {
                     navController.navigateSingleTopTo(profileSetupScreen.route) }
             )
         }
@@ -101,19 +86,17 @@ fun WalletWiseNavHost(
         /**
          * SETUP PROFILE ===========================================================================
          */
-        //SetupProfileScreen
+        //SetupProfileScreen -----------------------------------------------------------------------
         composable(
             route = profileSetupScreen.route,
             enterTransition = {
-                return@composable fadeIn(tween(300))
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
+                )
             },
             exitTransition = {
-                return@composable fadeOut(tween(300))
-            },
-            popEnterTransition = {
-                return@composable slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(300)
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
                 )
             }, )
         {
@@ -123,14 +106,18 @@ fun WalletWiseNavHost(
                 },
             )
         }
-        //SetupPinScreen
+        //SetupPinScreen ---------------------------------------------------------------------------
         composable(
             route = pinSetupScreen.route,
             enterTransition = {
-                return@composable fadeIn(tween(300))
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
+                )
             },
             exitTransition = {
-                return@composable fadeOut(tween(300))
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
+                )
             },
             popEnterTransition = {
                 return@composable slideIntoContainer(
@@ -148,16 +135,19 @@ fun WalletWiseNavHost(
                 },
             )
         }
-        //SetupBiometricScreen
+        //SetupBiometricScreen ---------------------------------------------------------------------
         composable(
             route = biometricsSetupScreen.route,
             enterTransition = {
-                return@composable fadeIn(tween(300))
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
+                )
             },
             exitTransition = {
-                return@composable fadeOut(tween(300))
-            }
-        )
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
+                )
+            }, )
         {
             SetupBiometricsScreen(
                 onNextClick = {
@@ -171,13 +161,12 @@ fun WalletWiseNavHost(
         composable(
             route = pinVerificationScreen.route,
             enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(300)
-                )
+                return@composable fadeIn(tween(300))
             },
             exitTransition = {
-                scaleOut(tween(500))
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
+                )
             }, )
         {
             VerifyUserScreen(
@@ -191,12 +180,13 @@ fun WalletWiseNavHost(
         /**
          * MAIN APP SCREENS ========================================================================
          */
-        //HomeScreen -------------------------------------------------------------------------------
+        //HOME Screen ------------------------------------------------------------------------------
         composable(
             route = homeScreen.route,
-            enterTransition = { expandIn(
-                animationSpec = tween(300),
-                expandFrom =  Alignment.CenterStart, )
+            enterTransition = {
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
+                )
             },
             exitTransition = { fadeOut(
                 animationSpec = tween(300), )
@@ -215,17 +205,6 @@ fun WalletWiseNavHost(
                 onNavigateToCategoryDetail = { categoryId ->
                     navController.navigate(route = "${categoryDetailScreen.route}/$categoryId")
                 },
-                //FAB Button Actions
-                onClickAddManual = {
-                    navController.navigate(route = "${transactionDetailScreen.route}/-1")
-                },
-                onClickAddOCR = {
-                    navController.navigate(route = "${transactionDetailScreen.route}/-2")
-                },
-                onClickAddText = {
-                    navController.navigate(route = "${transactionDetailScreen.route}/-3")
-                },
-                //Quick Access Actions
                 quickAccessOnAnalysisClick = {
                     /*TODO*/
                 },

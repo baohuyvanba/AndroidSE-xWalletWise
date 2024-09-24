@@ -47,11 +47,9 @@ fun PreviewSetupBiometricsScreen()
 
 @Composable
 fun SetupBiometricsScreen(
-    pinViewModel: PinViewModel = hiltViewModel(),
     userPreferences: UserPreferences = hiltViewModel(),
     onNextClick: () -> Unit, )
 {
-    val pinUiState = pinViewModel.pinUiState
     val context    = LocalContext.current
     val configuration = LocalConfiguration.current
 
@@ -124,7 +122,7 @@ fun SetupBiometricsScreen(
             }
 
             /**
-             * NUMBERS PAD =========================================================================
+             * BUTTONS =============================================================================
              */
             Row(
                 modifier = Modifier
@@ -138,6 +136,7 @@ fun SetupBiometricsScreen(
                     text = "Skip",
                     onClick = {
                         setFirstTimeLaunch(context = context, isFirstTime = false)
+                        userPreferences.setFirstTimeLaunch(false)
                         onNextClick()
                     },
                     buttonWidth = screenWidth.dp,
@@ -146,7 +145,7 @@ fun SetupBiometricsScreen(
                 )
 
                 SpecialGlassButton(
-                    text = "Next",
+                    text = "Enable",
                     onClick = {
                         userPreferences.setBiometricsEnabled(true)
                         userPreferences.setFirstTimeLaunch(false)

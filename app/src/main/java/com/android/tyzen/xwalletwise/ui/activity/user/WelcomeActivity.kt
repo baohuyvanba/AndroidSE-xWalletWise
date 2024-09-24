@@ -29,29 +29,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.android.tyzen.xwalletwise.R
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewWelcomeScreen() {
-    WalletWiseTheme {
-        WelcomeScreen(
-            onStartPress  = { /* TODO */ },
-        )
-    }
-}
-
 /**
- * Welcome Screen
+ * Welcome Screen ==================================================================================
  */
 @Composable
 fun WelcomeScreen(
-    onStartPress: () -> Unit )
+    onStartClick: () -> Unit )
 {
     val configuration = LocalConfiguration.current
     val screenWidth   = configuration.screenWidthDp
@@ -66,10 +55,6 @@ fun WelcomeScreen(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
             )
-
-            /**
-             * LOGO AND WELCOME TEXT ---------------------------------------------------------------
-             */
 
             /**
              * LOGO AND WELCOME TEXT ---------------------------------------------------------------
@@ -96,10 +81,6 @@ fun WelcomeScreen(
                     modifier = Modifier
                         .size((screenWidth*0.6).dp))
             }
-
-            /**
-             * BUTTON SECTION ----------------------------------------------------------------------
-             */
 
             /**
              * BUTTON SECTION ----------------------------------------------------------------------
@@ -143,7 +124,7 @@ fun WelcomeScreen(
 
                         //Button
                         OutlinedButton(
-                            onClick = { onStartPress() },
+                            onClick = { onStartClick() },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(60.dp),

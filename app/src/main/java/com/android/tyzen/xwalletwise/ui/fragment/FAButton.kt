@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -158,40 +159,69 @@ fun FAButtonCircle(
 }
 
 /**
- * FAB View Detail =================================================================================
+ * FAB Add Transaction =============================================================================
  */
 @Composable
-@Preview(showBackground = true)
-fun PreviewFABViewDetailIcon() {
-    WalletWiseTheme {
-        Column(modifier = Modifier.background(Color.Black))
-        {
-            FABViewDetailIcon(
-                modifier = Modifier,
-                onClick = { /*TODO*/ },
-                icon = Icons.Default.Add,
-                containerColor = Color.White.copy(0.2f),
-                shape = FloatingActionButtonDefaults.shape,
-                iconColor = Color.White,
-                contentDescription = "Add Transaction",
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            FABViewDetailExtended(
-                modifier = Modifier,
-                onClick = { /*TODO*/ },
-                text = "Add Transaction",
-                icon = Icons.Default.Add,
-                containerColor = Color.White.copy(0.2f),
-                shape = FloatingActionButtonDefaults.extendedFabShape,
-                contentColor = Color.White,
-                contentDescription = "Add Transaction",
-            )
-        }
+fun FABTransaction(
+    modifier: Modifier,
+    onClick: () -> Unit,
+    icon: ImageVector = Icons.Default.Add,
+    shape: Shape = FloatingActionButtonDefaults.shape,
+    containerColor: Color = Color.White,
+    borderColor: Color = Color.White,
+    contentDescription: String, )
+{
+    FloatingActionButton(
+        onClick = onClick,
+        containerColor = containerColor,
+        shape = shape,
+        elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = shape,
+            ),
+    ) {
+        Icon(
+            imageVector = icon,
+            tint = borderColor,
+            contentDescription = contentDescription,)
     }
 }
 
+@Composable
+fun FABTransactionCircle(
+    modifier: Modifier,
+    onClick: () -> Unit,
+    icon: ImageVector = Icons.Default.Add,
+    containerColor: Color = Color.White,
+    borderColor: Color = Color.White,
+    contentDescription: String)
+{
+    FloatingActionButton(
+        onClick = onClick,
+        containerColor = containerColor,
+        shape = CircleShape,
+        elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = CircleShape,
+            ),
+    ) {
+        Icon(
+            imageVector = icon,
+            tint = borderColor,
+            contentDescription = contentDescription, )
+    }
+}
+
+
+/**
+ * FAB View Detail =================================================================================
+ */
 @Composable
 fun FABViewDetailIcon(
     modifier: Modifier,

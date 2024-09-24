@@ -7,10 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -129,35 +133,35 @@ fun PasswordField(
 /**
  * FORM TEXT FIELD =================================================================================
  */
-@Preview(showBackground = false)
-@Composable
-fun PreviewFormTextField() {
-    WalletWiseTheme {
-        Column {
-            FormTextField(
-                value = "",
-                onValueChange = {},
-                label = "Title",
-                modifier = Modifier,
-                keyboardOptions = KeyboardOptions.Default,
-                singleLine = true,
-                isError = false,
-                enabled = true,
-                readOnly = false, )
-
-            FormTextField(
-                value = "Value - ReadOnly",
-                onValueChange = {},
-                label = "Title",
-                modifier = Modifier,
-                keyboardOptions = KeyboardOptions.Default,
-                singleLine = true,
-                isError = false,
-                enabled = false,
-                readOnly = true, )
-        }
-    }
-}
+//@Preview(showBackground = false)
+//@Composable
+//fun PreviewFormTextField() {
+//    WalletWiseTheme {
+//        Column {
+//            FormTextField(
+//                value = "",
+//                onValueChange = {},
+//                label = "Title",
+//                modifier = Modifier,
+//                keyboardOptions = KeyboardOptions.Default,
+//                singleLine = true,
+//                isError = false,
+//                enabled = true,
+//                readOnly = false, )
+//
+//            FormTextField(
+//                value = "Value - ReadOnly",
+//                onValueChange = {},
+//                label = "Title",
+//                modifier = Modifier,
+//                keyboardOptions = KeyboardOptions.Default,
+//                singleLine = true,
+//                isError = false,
+//                enabled = false,
+//                readOnly = true, )
+//        }
+//    }
+//}
 
 @Composable
 fun FormTextField(
@@ -340,5 +344,92 @@ fun BalanceAmountField(
                 )
             }
         }
+    }
+}
+
+/**
+ * TRANSACTION FIELD ===============================================================================
+ */
+@Preview(showBackground = false)
+@Composable
+fun PreviewTransactionDetailField() {
+    WalletWiseTheme {
+        Column(
+            modifier = Modifier.background(Color(0xFF59C173)).padding(8.dp),
+        ) {
+            TransactionDetailField(
+                value = "This is the Field",
+                onValueChange = {},
+                label = "Title",
+                modifier = Modifier,
+                keyboardOptions = KeyboardOptions.Default,
+                readOnly = false, )
+        }
+    }
+}
+
+@Composable
+fun TransactionDetailField(
+    modifier: Modifier = Modifier,
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    readOnly: Boolean = false,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(), )
+    {
+        Text(
+            text = label,
+            modifier = Modifier.padding(start = 4.dp, bottom = 0.dp),
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Bold,
+                color      = Color.Black,
+                textAlign  = TextAlign.Start,
+            ),
+        )
+
+        OutlinedTextField(
+            modifier = modifier
+                .padding(vertical = 4.dp)
+                .fillMaxWidth()
+                .heightIn(max = 50.dp),
+            value = value,
+            onValueChange = {
+                if (!readOnly) {
+                    onValueChange(it)
+                }
+            },
+            keyboardOptions = keyboardOptions,
+            shape = RoundedCornerShape(10.dp),
+            textStyle =
+            TextStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            ),
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            readOnly = readOnly,
+            colors = OutlinedTextFieldDefaults.colors(
+                //Border color
+                focusedBorderColor = MaterialTheme.colorScheme.primary,              //focused
+                unfocusedBorderColor = Color.White,                                    //unfocused
+                disabledBorderColor = MaterialTheme.colorScheme.secondaryContainer,   //disabled
+                //Label color
+                focusedLabelColor = MaterialTheme.colorScheme.primary,              //focused
+                unfocusedLabelColor = MaterialTheme.colorScheme.primary,              //unfocused
+                disabledLabelColor = MaterialTheme.colorScheme.onSurface,            //disabled
+                //Cursor color
+                cursorColor = MaterialTheme.colorScheme.primary,
+            ),
+            interactionSource = interactionSource,
+        )
     }
 }
