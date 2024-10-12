@@ -40,6 +40,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.tyzen.xwalletwise.R
@@ -52,6 +55,7 @@ import com.android.tyzen.xwalletwise.ui.fragment.FABViewDetailExtended
 import com.android.tyzen.xwalletwise.ui.fragment.FABViewDetailIcon
 import com.android.tyzen.xwalletwise.ui.fragment.FAButton
 import com.android.tyzen.xwalletwise.ui.fragment.FormTextField
+import com.android.tyzen.xwalletwise.ui.fragment.TransactionDescriptionField
 import com.android.tyzen.xwalletwise.ui.fragment.TransactionDetailField
 import com.android.tyzen.xwalletwise.ui.fragment.TransactionTypeChipsGroup
 import com.android.tyzen.xwalletwise.ui.fragment.WalletWiseTopAppBar
@@ -120,16 +124,16 @@ fun ViewTransactionScreen(
     val balanceColor: Color
     if (transactionDetailUiState.transactionType == TransactionType.INCOME) {
         backgroundColor = listOf(
-            Color(0xFFFAFFD1),
-            Color(0xFFA1FFCE)
+            Color(0xFFFAFFD1).copy(0.8f),
+            Color(0xFFA1FFCE),
         )
-        balanceColor = Color(0xFF59C173)
+        balanceColor = MaterialTheme.colorScheme.primary.copy(0.8f)
     } else { //TransactionType.OUTCOME
         backgroundColor = listOf(
             Color(0xFFe1eec3).copy(0.5f),
-            Color(0xFFf05053).copy(0.6f)
+            Color(0xFFf05053).copy(0.6f),
         )
-        balanceColor = Color(0xFFfd746c).copy(0.8f)
+        balanceColor = MaterialTheme.colorScheme.error.copy(0.8f)
     }
 
     Scaffold(
@@ -228,7 +232,7 @@ fun ViewTransactionScreen(
                     keyboardOptions = KeyboardOptions.Default,
                     readOnly = readOnly,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height((screenHeight*0.01).dp))
 
                 /**
                  * CATEGORY ========================================================================
@@ -250,7 +254,7 @@ fun ViewTransactionScreen(
                         contentDescription = "Category Icon: ${transactionDetailUiState.category.icon}",
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height((screenHeight*0.01).dp))
 
                 /**
                  * DATE & TIME =====================================================================
@@ -282,16 +286,23 @@ fun ViewTransactionScreen(
                         initialDate = transactionDetailUiState.transactionDate,
                     )
                 }
+                Spacer(modifier = Modifier.height((screenHeight*0.01).dp))
 
                 /**
                  * DESCRIPTION =====================================================================
                  */
-                TransactionDetailField(
+                TransactionDescriptionField(
                     label = "Description",
                     value = transactionDetailUiState.transactionDescription ?: "",
                     onValueChange = {
                         transactionDetailViewModel.onTransactionDescriptionChanged(it)
                     },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Start,
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    ),
                     readOnly = readOnly,
                 )
             }

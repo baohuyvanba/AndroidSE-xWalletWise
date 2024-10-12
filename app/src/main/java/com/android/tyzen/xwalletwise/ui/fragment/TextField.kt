@@ -348,26 +348,8 @@ fun BalanceAmountField(
 }
 
 /**
- * TRANSACTION FIELD ===============================================================================
+ * TRANSACTION FIELDS ==============================================================================
  */
-@Preview(showBackground = false)
-@Composable
-fun PreviewTransactionDetailField() {
-    WalletWiseTheme {
-        Column(
-            modifier = Modifier.background(Color(0xFF59C173)).padding(8.dp),
-        ) {
-            TransactionDetailField(
-                value = "This is the Field",
-                onValueChange = {},
-                label = "Title",
-                modifier = Modifier,
-                keyboardOptions = KeyboardOptions.Default,
-                readOnly = false, )
-        }
-    }
-}
-
 @Composable
 fun TransactionDetailField(
     modifier: Modifier = Modifier,
@@ -375,8 +357,13 @@ fun TransactionDetailField(
     value: String,
     onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
+    textStyle: TextStyle = TextStyle(
+        color = MaterialTheme.colorScheme.onSurface,
+        fontWeight = FontWeight.SemiBold,
+        textAlign = TextAlign.Center,
+        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+    ),
     readOnly: Boolean = false,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -389,7 +376,7 @@ fun TransactionDetailField(
             modifier = Modifier.padding(start = 4.dp, bottom = 0.dp),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold,
-                color      = Color.Black,
+                color      = Color.Black.copy(0.7f),
                 textAlign  = TextAlign.Start,
             ),
         )
@@ -407,25 +394,83 @@ fun TransactionDetailField(
             },
             keyboardOptions = keyboardOptions,
             shape = RoundedCornerShape(10.dp),
-            textStyle =
-            TextStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center,
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
-            ),
-            leadingIcon = leadingIcon,
+            textStyle = textStyle,
             trailingIcon = trailingIcon,
             readOnly = readOnly,
             colors = OutlinedTextFieldDefaults.colors(
                 //Border color
-                focusedBorderColor = MaterialTheme.colorScheme.primary,              //focused
-                unfocusedBorderColor = Color.White,                                    //unfocused
-                disabledBorderColor = MaterialTheme.colorScheme.secondaryContainer,   //disabled
+                focusedBorderColor   = MaterialTheme.colorScheme.primary,              //focused
+                unfocusedBorderColor = Color.LightGray,                                //unfocused
+                disabledBorderColor  = MaterialTheme.colorScheme.secondaryContainer,   //disabled
                 //Label color
-                focusedLabelColor = MaterialTheme.colorScheme.primary,              //focused
-                unfocusedLabelColor = MaterialTheme.colorScheme.primary,              //unfocused
-                disabledLabelColor = MaterialTheme.colorScheme.onSurface,            //disabled
+                focusedLabelColor = MaterialTheme.colorScheme.primary,                 //focused
+                unfocusedLabelColor = MaterialTheme.colorScheme.primary,               //unfocused
+                disabledLabelColor = MaterialTheme.colorScheme.onSurface,              //disabled
+                //Cursor color
+                cursorColor = MaterialTheme.colorScheme.primary,
+            ),
+            interactionSource = interactionSource,
+        )
+    }
+}
+
+@Composable
+fun TransactionDescriptionField(
+    modifier: Modifier = Modifier,
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    textStyle: TextStyle = TextStyle(
+        color = MaterialTheme.colorScheme.onSurface,
+        fontWeight = FontWeight.SemiBold,
+        textAlign = TextAlign.Center,
+        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+    ),
+    readOnly: Boolean = false,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val maxLines: Int = 10
+
+    Column(
+        modifier = Modifier.fillMaxWidth(), )
+    {
+        Text(
+            text = label,
+            modifier = Modifier.padding(start = 4.dp, bottom = 0.dp),
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Bold,
+                color      = Color.Black.copy(0.7f),
+                textAlign  = TextAlign.Start,
+            ),
+        )
+
+        OutlinedTextField(
+            modifier = modifier
+                .padding(vertical = 4.dp)
+                .fillMaxWidth(),
+            value = value,
+            onValueChange = {
+                if (!readOnly) {
+                    onValueChange(it)
+                }
+            },
+            keyboardOptions = keyboardOptions,
+            shape = RoundedCornerShape(10.dp),
+            textStyle = textStyle,
+            trailingIcon = trailingIcon,
+            readOnly = readOnly,
+            maxLines = maxLines,
+            colors = OutlinedTextFieldDefaults.colors(
+                //Border color
+                focusedBorderColor   = MaterialTheme.colorScheme.primary,              //focused
+                unfocusedBorderColor = Color.LightGray,                                //unfocused
+                disabledBorderColor  = MaterialTheme.colorScheme.secondaryContainer,   //disabled
+                //Label color
+                focusedLabelColor = MaterialTheme.colorScheme.primary,                 //focused
+                unfocusedLabelColor = MaterialTheme.colorScheme.primary,               //unfocused
+                disabledLabelColor = MaterialTheme.colorScheme.onSurface,              //disabled
                 //Cursor color
                 cursorColor = MaterialTheme.colorScheme.primary,
             ),

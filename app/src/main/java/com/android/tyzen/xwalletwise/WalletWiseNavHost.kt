@@ -1,13 +1,16 @@
 package com.android.tyzen.xwalletwise
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.EaseInOutQuad
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,11 +41,10 @@ import com.android.tyzen.xwalletwise.ui.activity.user.ProfileSetupScreen
 import com.android.tyzen.xwalletwise.ui.activity.sercurity.SetupPinScreen
 import com.android.tyzen.xwalletwise.ui.activity.user.WelcomeScreen
 
-//Control application navigation with NavHost
+//APPLICATION NAVIGATION
 @Composable
 fun WalletWiseNavHost(
-    navController: NavHostController,
-    modifier: Modifier = Modifier, )
+    navController: NavHostController, )
 {
     //Setup: Start Screen
     val context = LocalContext.current
@@ -55,13 +57,10 @@ fun WalletWiseNavHost(
         }
     ) }
 
-    /**
-     * Navigation Host
-     */
+    //Navigation Host
     NavHost(
         navController = navController,
-        startDestination = startDestination,
-        modifier = modifier.background(Color.Transparent), )
+        startDestination = startDestination, )
     {
         /**
          * WELCOME =================================================================================
@@ -72,10 +71,9 @@ fun WalletWiseNavHost(
                 return@composable fadeIn(tween(300))
             },
             exitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
-            })
+                return@composable fadeOut(
+                    tween(durationMillis = 1200, delayMillis = 0, easing = EaseInOutQuad))
+            }, )
         {
             WelcomeScreen(
                 onStartClick = {
@@ -90,14 +88,11 @@ fun WalletWiseNavHost(
         composable(
             route = profileSetupScreen.route,
             enterTransition = {
-                return@composable slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
+                return@composable fadeIn(tween(1200))
             },
             exitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
+                return@composable fadeOut(
+                    tween(durationMillis = 1200, delayMillis = 0, easing = EaseInOutQuad))
             }, )
         {
             ProfileSetupScreen(
@@ -110,21 +105,13 @@ fun WalletWiseNavHost(
         composable(
             route = pinSetupScreen.route,
             enterTransition = {
-                return@composable slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
+                return@composable fadeIn(tween(1200))
             },
             exitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
-            },
-            popEnterTransition = {
-                return@composable slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.End,
-                    animationSpec = tween(300)
-                )
+                return@composable fadeOut(
+                    tween(durationMillis = 1200, delayMillis = 0, easing = EaseInOutQuad))
             }, )
+            //popEnterTransition = { return@composable slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.End, animationSpec = tween(300)) },
         {
             SetupPinScreen(
                 onNextClickToBiometric = {
@@ -139,14 +126,11 @@ fun WalletWiseNavHost(
         composable(
             route = biometricsSetupScreen.route,
             enterTransition = {
-                return@composable slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
+                return@composable fadeIn(tween(1200))
             },
             exitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
+                return@composable fadeOut(
+                    tween(durationMillis = 1200, delayMillis = 0, easing = EaseInOutQuad))
             }, )
         {
             SetupBiometricsScreen(
@@ -161,12 +145,11 @@ fun WalletWiseNavHost(
         composable(
             route = pinVerificationScreen.route,
             enterTransition = {
-                return@composable fadeIn(tween(300))
+                return@composable fadeIn(tween(1200))
             },
             exitTransition = {
-                return@composable slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
+                return@composable fadeOut(
+                    tween(durationMillis = 600, delayMillis = 0, easing = EaseInOutQuad))
             }, )
         {
             VerifyUserScreen(
@@ -184,14 +167,18 @@ fun WalletWiseNavHost(
         composable(
             route = homeScreen.route,
             enterTransition = {
-                return@composable slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start, tween(600)
-                )
+                return@composable fadeIn(tween(1200))
             },
             exitTransition = { fadeOut(
                 animationSpec = tween(300), )
-            }, )
-        {
+            },
+            popEnterTransition = {
+                return@composable slideInVertically(
+                    initialOffsetY = { it / 3 },
+                    animationSpec  = tween(durationMillis = 300)
+                )
+            },
+        ) {
             HomeScreen(
                 onNavigateToTransactionList = {
                     navController.navigateSingleTopTo(transactionListScreen.route)
@@ -225,8 +212,14 @@ fun WalletWiseNavHost(
             },
             exitTransition = { fadeOut(
                 animationSpec = tween(300), )
-            }, )
-        {
+            },
+            popEnterTransition = {
+                return@composable slideInVertically(
+                    initialOffsetY = { it / 3 },
+                    animationSpec  = tween(durationMillis = 300)
+                )
+            }
+        ) {
 
         }
         /**
@@ -235,12 +228,20 @@ fun WalletWiseNavHost(
         //TransactionsListScreen -------------------------------------------------------------------
         composable(
             route = transactionListScreen.route,
-            enterTransition = { expandIn(
-                animationSpec = tween(300),
-                expandFrom =  Alignment.CenterStart, )
+            enterTransition = {
+                return@composable slideInVertically(
+                    initialOffsetY = { it / 3 },
+                    animationSpec  = tween(durationMillis = 300)
+                )
             },
             exitTransition = { fadeOut(
                 animationSpec = tween(300), )
+            },
+            popEnterTransition = {
+                return@composable slideInVertically(
+                    initialOffsetY = { it / 3 },
+                    animationSpec  = tween(durationMillis = 300)
+                )
             },
         ) {
             TransactionsListScreen(
@@ -283,14 +284,22 @@ fun WalletWiseNavHost(
         //CategoryListScreen -----------------------------------------------------------------------
         composable(
             route = categoryListScreen.route,
-            enterTransition = { expandIn(
-                animationSpec = tween(300),
-                expandFrom =  Alignment.CenterStart, )
+            enterTransition = {
+                return@composable slideInVertically(
+                    initialOffsetY = { it / 3 },
+                    animationSpec  = tween(durationMillis = 300)
+                )
             },
             exitTransition = { fadeOut(
                 animationSpec = tween(300), )
-            }, )
-        {
+            },
+            popEnterTransition = {
+                return@composable slideInVertically(
+                    initialOffsetY = { it / 3 },
+                    animationSpec  = tween(durationMillis = 300)
+                )
+            },
+        ) {
             CategoriesListScreen(
                 onCategoryClick = { categoryId ->
                     navController.navigate(route = "${categoryDetailScreen.route}/$categoryId")

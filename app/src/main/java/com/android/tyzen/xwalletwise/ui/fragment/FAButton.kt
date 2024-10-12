@@ -1,5 +1,6 @@
 package com.android.tyzen.xwalletwise.ui.fragment
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -22,23 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-
-import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewFAButton() {
-    WalletWiseTheme {
-        FAButton(
-            modifier = Modifier,
-            onClick = { /*TODO*/ },
-            icon = Icons.Default.Add,
-            contentDescription = "Add Transaction",
-        )
-    }
-}
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun FAButton(
@@ -98,66 +85,6 @@ fun FAButton(
     }
 }
 
-@Composable
-fun FAButtonCircle(
-    modifier: Modifier,
-    onClick: () -> Unit,
-    icon: ImageVector? = null,
-    iconResId: Int? = null,
-    text: String? = null,
-    buttonColor: Color = MaterialTheme.colorScheme.primary,
-    contentDescription: String)
-{
-    if (text.isNullOrBlank()) {
-        FloatingActionButton(
-            onClick = onClick,
-            containerColor = buttonColor,
-            shape = CircleShape,
-            modifier = modifier.padding(16.dp),
-        )
-        {
-            if (icon != null)
-            {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = contentDescription, )
-            }
-            else if (iconResId != null)
-            {
-                Icon(
-                    painter = painterResource(id = iconResId),
-                    contentDescription = contentDescription, )
-            }
-        }
-    }
-    else
-    {
-        ExtendedFloatingActionButton(
-            onClick = onClick,
-            containerColor = buttonColor,
-            modifier = Modifier.padding(16.dp),
-            expanded = true,
-            icon = {
-                if (icon != null)
-                {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = contentDescription, )
-                }
-                else if (iconResId != null)
-                {
-                    Icon(
-                        painter = painterResource(id = iconResId),
-                        contentDescription = contentDescription, )
-                }
-            },
-            text = {
-                Text(text = text)
-            },
-        )
-    }
-}
-
 /**
  * FAB Add Transaction =============================================================================
  */
@@ -167,25 +94,24 @@ fun FABTransaction(
     onClick: () -> Unit,
     icon: ImageVector = Icons.Default.Add,
     shape: Shape = FloatingActionButtonDefaults.shape,
-    containerColor: Color = Color.White,
-    borderColor: Color = Color.White,
+    colors: List<Color>, //icon, container, border
     contentDescription: String, )
 {
     FloatingActionButton(
         onClick = onClick,
-        containerColor = containerColor,
+        containerColor = colors[1],
         shape = shape,
         elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
         modifier = modifier
             .border(
                 width = 1.dp,
-                color = borderColor,
+                color = colors[2],
                 shape = shape,
             ),
     ) {
         Icon(
             imageVector = icon,
-            tint = borderColor,
+            tint = colors[0],
             contentDescription = contentDescription,)
     }
 }
@@ -280,5 +206,49 @@ fun FABViewDetailExtended(
                 text = text,
                 color = contentColor, )
         },
+    )
+}
+
+/**
+ * FAB Category ====================================================================================
+ */
+@Composable
+fun FABCategory(
+    modifier: Modifier,
+    onClick: () -> Unit,
+    icon: ImageVector = Icons.Default.Add,
+    text: String,
+    shape: Shape = FloatingActionButtonDefaults.shape,
+    colors: List<Color>,
+    contentDescription: String, )
+{
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        containerColor = colors[1],
+        shape = shape,
+        elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = colors[2],
+                shape = shape,
+            ),
+        icon = {
+            Icon(
+                imageVector = icon,
+                tint = colors[0],
+                contentDescription = contentDescription,
+            )
+        },
+        text = {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = colors[0],
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.sp,
+                )
+            )
+        }
     )
 }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,8 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +43,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,13 +51,10 @@ import com.android.tyzen.xwalletwise.model.user.UserPreferences
 
 import com.android.tyzen.xwalletwise.ui.fragment.BalanceSection
 import com.android.tyzen.xwalletwise.ui.fragment.DetailedBalanceSection
-import com.android.tyzen.xwalletwise.ui.fragment.NormalIconLabelButton
 import com.android.tyzen.xwalletwise.ui.activity.category.CategoryCard
 import com.android.tyzen.xwalletwise.ui.activity.transaction.TransactionCard
 import com.android.tyzen.xwalletwise.ui.fragment.FABTransaction
 import com.android.tyzen.xwalletwise.ui.fragment.FABTransactionCircle
-import com.android.tyzen.xwalletwise.ui.fragment.FAButtonCircle
-import com.android.tyzen.xwalletwise.ui.fragment.NormalIconButton
 import com.android.tyzen.xwalletwise.ui.fragment.QuickAccessBar
 import com.android.tyzen.xwalletwise.ui.viewmodel.HomeUiState
 import com.android.tyzen.xwalletwise.ui.viewmodel.HomeViewModel
@@ -74,7 +67,6 @@ import kotlin.math.sin
  * Home Screen -------------------------------------------------------------------------------------
  */
 @SuppressLint("UseOfNonLambdaOffsetOverload")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     //transaction
@@ -118,75 +110,8 @@ fun HomeScreen(
 
     Scaffold(
         modifier = Modifier
-            .background(Color.Transparent)
-            .padding(bottom = (screenHeight * 0.06).dp),
-        floatingActionButton = {
-            FABTransaction(
-                modifier = Modifier,
-                onClick  = {
-                    expandedState.value = !expandedState.value
-                },
-                icon = if (!expandedState.value) Icons.Default.Add else Icons.Default.Close,
-                containerColor = Color(0xFF91E9CF).copy(alpha = 0.3f),
-                borderColor = Color(0xFF196B52).copy(0.5f),
-                contentDescription = "Add Transaction",
-            )
-
-            if (expandedState.value)
-            {
-                for (i in 0 until numExpandedFab)
-                {
-                    val fabAngle = rotationAngle + (i + 1) * angleIncrement
-
-                    Box(
-                        modifier = Modifier
-                            .offset(
-                                x = animateFloatAsState(
-                                    targetValue = 100 * sin(Math.toRadians(fabAngle.toDouble())).toFloat(),
-                                    animationSpec = tween(durationMillis = 300), label = "", ).value.dp,
-                                y = animateFloatAsState(
-                                    targetValue = 100 * cos(Math.toRadians(fabAngle.toDouble())).toFloat(),
-                                    animationSpec = tween(durationMillis = 300), label = "", ).value.dp
-                            ),
-                    ) {
-                        when (i) {
-                            0 -> FABTransactionCircle(
-                                modifier = Modifier.rotate(fabAngle),
-                                onClick = {
-                                    onNavigateToTransactionDetail.invoke(-1)
-                                },
-                                icon = Icons.Default.Edit,
-                                containerColor = Color(0xFF91E9CF).copy(alpha = 0.3f),
-                                borderColor = Color(0xFF196B52).copy(0.5f),
-                                contentDescription = "Manual",
-                            )
-                            1 -> FABTransactionCircle(
-                                modifier = Modifier.rotate(fabAngle),
-                                onClick = {
-                                    onNavigateToTransactionDetail.invoke(-2)
-                                },
-                                icon = ImageVector.vectorResource(R.drawable.ic_receipt_scan),
-                                containerColor = Color(0xFF91E9CF).copy(alpha = 0.3f),
-                                borderColor = Color(0xFF196B52).copy(0.5f),
-                                contentDescription = "OCR",
-                            )
-
-                            2 -> FABTransactionCircle(
-                                modifier = Modifier.rotate(fabAngle),
-                                onClick = {
-                                    onNavigateToTransactionDetail.invoke(-3)
-                                },
-                                icon = ImageVector.vectorResource(R.drawable.ic_transaction_text),
-                                containerColor = Color(0xFF91E9CF).copy(alpha = 0.3f),
-                                borderColor = Color(0xFF196B52).copy(0.5f),
-                                contentDescription = "Text",
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End, )
+            .background(Color.Transparent), )
+            //.padding(bottom = (screenHeight * 0.06).dp), )
     { innerPadding ->
         Box(
             modifier = Modifier

@@ -41,7 +41,7 @@ import com.android.tyzen.xwalletwise.ui.fragment.WalletWiseFloatingTopBar
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-//Application START POINT
+//START POINT
 @AndroidEntryPoint
 class WalletWiseActivity : AppCompatActivity() {
     //PERMISSION Request
@@ -74,16 +74,20 @@ class WalletWiseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.apply {
             hide(WindowInsetsCompat.Type.statusBars())
             hide(WindowInsetsCompat.Type.navigationBars())
             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+        enableEdgeToEdge()
+
+        //Application's Content
         setContent {
             requestCameraPermission()
-            WalletWise()
+            WalletWiseTheme {
+                WalletWise()
+            }
         }
     }
 }
@@ -91,105 +95,108 @@ class WalletWiseActivity : AppCompatActivity() {
 @Composable
 fun WalletWise()
 {
-    WalletWiseTheme {
-        val navController = rememberNavController()
-        val currentBackStack by navController.currentBackStackEntryAsState()
-        var currentDestination = currentBackStack?.destination?.route
-        val configuration = LocalConfiguration.current
-        val screenHeight = configuration.screenHeightDp
+    val navController = rememberNavController()
+    val currentBackStack by navController.currentBackStackEntryAsState()
+    var currentDestination = currentBackStack?.destination?.route
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
 
-        /**
-         * Application Bars Types ==================================================================
-         */
-        //Type
-        val barsType: Int = when {
-            tabNavigationScreens.contains(currentDestination) -> 0 //main Top & Bottom App Bar
+    /**
+     * Application Bars Types ==================================================================
+     */
+    val barsType: Int = when {
+        tabNavigationScreens.contains(currentDestination) -> 0
+        else -> -1
+    }
+
+    var selectedTab by remember { mutableIntStateOf(0) }
+    LaunchedEffect(key1 = currentBackStack?.destination?.route) {
+        currentDestination = currentBackStack?.destination?.route
+        selectedTab = when (currentDestination) {
+            homeScreen.route -> 0
+            transactionListScreen.route -> 1
+            categoryListScreen.route -> 2
             else -> -1
         }
+    }
 
-        /**
-         * Main Components =========================================================================
-         */
-        var selectedTab by remember { mutableIntStateOf(0) }
-        LaunchedEffect(key1 = currentBackStack?.destination?.route) {
-            currentDestination = currentBackStack?.destination?.route
-            selectedTab = when (currentDestination) {
-                homeScreen.route -> 0
-                transactionListScreen.route -> 1
-                categoryListScreen.route -> 2
-                else -> -1
-            }
-        }
-
-        Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Transparent), )
-        { innerPadding ->
-            Box(modifier = Modifier.fillMaxSize())
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Transparent), )
+    { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize())
+        {
+            /**
+             * Navigation Host =====================================================================
+             */
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding), )
             {
-                //Navigation Host ------------------------------------------------------------------
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding), )
-                {
-                    when (barsType) {
-                        0 -> Spacer(
-                            modifier = Modifier
-                                .height((screenHeight * 0.05).dp)
-                                .fillMaxWidth()
-                                .background(Color.Transparent)
-                        )
-                    }
-
-                    WalletWiseNavHost(
-                        navController = navController,
-                        modifier = Modifier.fillMaxSize(),
+                when (barsType) {
+                    0 -> Spacer(
+                        modifier = Modifier
+                            .height((screenHeight * 0.05).dp)
+                            .fillMaxWidth()
+                            .background(Color.Transparent)
                     )
                 }
 
-                //Top Floating App Bar -------------------------------------------------------------
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top, )
-                {
-                    when (barsType) {
-                        0 -> WalletWiseFloatingTopBar(
-                            showActionButton = true,
-                            onActionClick = { /*TODO*/ },
-                        )
-                    }
-                }
+                WalletWiseNavHost(
+                    navController = navController,
+                )
+            }
 
-                //Bottom Floating App Bar ----------------------------------------------------------
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom, )
-                {
-                    when (barsType) {
-                        0 -> WalletWiseFloatingBottomBar(
-                            selectedTab = selectedTab,
-                            onTabSelected = { index ->
-                                selectedTab = index
-                                navController.navigate(
-                                    when (index) {
-                                        0 -> homeScreen.route
-                                        1 -> transactionListScreen.route
-                                        2 -> categoryListScreen.route
-                                        else -> homeScreen.route
-                                    }, )
-                                {
-                                    popUpTo(homeScreen.route) { saveState = true }
-                                    launchSingleTop = true
-                                }
-                            },
-                        )
-                    }
+            /**
+             * Top Floating App Bar ================================================================
+             */
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top, )
+            {
+                when (barsType) {
+                    0 -> WalletWiseFloatingTopBar(
+                        showActionButton = true,
+                        onActionClick = { /*TODO*/ },
+                    )
+                }
+            }
+
+            /**
+             * Bottom Floating App Bar =============================================================
+             */
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom, )
+            {
+                when (barsType) {
+                    0 -> WalletWiseFloatingBottomBar(
+                        selectedTab = selectedTab,
+                        onTabSelected = { index ->
+                            selectedTab = index
+                            navController.navigate(
+                                when (index) {
+                                    0 -> homeScreen.route
+                                    1 -> transactionListScreen.route
+                                    2 -> categoryListScreen.route
+                                    else -> homeScreen.route
+                                }, )
+                            {
+                                popUpTo(homeScreen.route) { saveState = true }
+                                launchSingleTop = true
+                            }
+                        },
+                        onAddTransactionPress = { transactionId ->
+                            navController.navigate(route = "${transactionDetailScreen.route}/$transactionId")
+                        },
+                    )
                 }
             }
         }
     }
 }
+

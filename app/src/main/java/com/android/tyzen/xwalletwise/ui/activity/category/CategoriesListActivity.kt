@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -56,6 +57,7 @@ import com.android.tyzen.xwalletwise.R
 import com.android.tyzen.xwalletwise.model.category.Category
 import com.android.tyzen.xwalletwise.model.user.UserPreferences
 import com.android.tyzen.xwalletwise.ui.fragment.BalanceSection
+import com.android.tyzen.xwalletwise.ui.fragment.FABCategory
 import com.android.tyzen.xwalletwise.ui.fragment.FAButton
 import com.android.tyzen.xwalletwise.ui.fragment.FilterRow
 import com.android.tyzen.xwalletwise.ui.viewmodel.category.CategoryViewModel
@@ -74,6 +76,9 @@ fun CategoriesListScreen(
 {
     val categoryUiState = categoryViewModel.categoryUiState
 
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
+
     val scope = rememberCoroutineScope()
     var currency by rememberSaveable { mutableStateOf("") }
     LaunchedEffect(key1 = Unit) {
@@ -83,13 +88,20 @@ fun CategoriesListScreen(
     }
 
     Scaffold(
+        modifier = Modifier
+            .background(Color.Transparent),
         floatingActionButton = {
-            FAButton(
-                modifier = Modifier.offset(y = (-48).dp),
+            FABCategory(
+                modifier = Modifier.padding(bottom = (screenHeight * 0.08).dp),
                 onClick = { onCategoryClick.invoke(-1) },
                 icon = Icons.Default.Add,
                 text = "Add Category",
-                contentDescription = "Add category"
+                contentDescription = "Add category",
+                colors = listOf(
+                    Color.White,
+                    MaterialTheme.colorScheme.secondary.copy(0.5f),
+                    MaterialTheme.colorScheme.primary,
+                ),
             )
         },
         floatingActionButtonPosition = FabPosition.End,

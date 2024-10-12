@@ -1,21 +1,14 @@
 package com.android.tyzen.xwalletwise.ui.fragment
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
@@ -34,11 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -47,7 +37,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 import com.android.tyzen.xwalletwise.R
@@ -97,13 +86,6 @@ fun PreviewWalletWiseAppBar() {
                 onExpenseListClick = { /*TODO*/ },
                 onCategoryListClick = { /*TODO*/ },
                 onSettingsClick = {/* TODO */},
-            )
-
-            Spacer(modifier = Modifier.height(16.dp).fillMaxWidth().background(Color.Black).padding(16.dp))
-
-            WalletWiseFloatingBottomBar(
-                selectedTab = 0,
-                onTabSelected = { /*TODO*/ },
             )
 
             Spacer(modifier = Modifier.height(16.dp).fillMaxWidth().background(Color.Black).padding(16.dp))
@@ -363,177 +345,5 @@ fun WalletWiseViewDetailTopAppBar(
             }
         },
     )
-}
-
-/**
- * Floating Bottom Bar =============================================================================
- */
-@Composable
-fun GlassButtonFloatingBottomBar(
-    icon: ImageVector,
-    title: String,
-    contentDescription: String,
-    isSelected: Boolean,
-    onClick: () -> Unit, )
-{
-    var iconColor = Color(0xFF1C9516)
-    val iconSize  = 80
-    val bottomPadding: Dp
-    val glowRadius by animateFloatAsState(targetValue = if (isSelected) 50f else 1f, label = "glass_floating_icon_glow")
-    val brushGradient: Brush = Brush.radialGradient(
-        colors = listOf(
-            Color.White.copy(alpha = if (isSelected) 0.5f else 0f),
-            Color.Transparent
-        ),
-        radius = glowRadius
-    )
-
-    if (isSelected) {
-        bottomPadding = 16.dp
-    }
-    else {
-        iconColor = iconColor.copy(alpha = 0.8f)
-        bottomPadding = 0.dp
-    }
-
-    IconButton(
-        modifier = Modifier.size(iconSize.dp),
-        onClick = onClick, )
-    {
-        Box(
-            modifier = Modifier
-                .size(iconSize.times(0.75).dp)
-                .background(
-                    brush = brushGradient,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center, )
-        {
-            Icon(
-                imageVector = icon,
-                contentDescription = contentDescription,
-                tint = iconColor,
-                modifier = Modifier.padding(bottom = bottomPadding)
-            )
-
-            if (isSelected) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize   = MaterialTheme.typography.bodySmall.fontSize.times(1.1f)
-                    ),
-                    color = iconColor,
-                    modifier = Modifier.padding(top = 24.dp)
-                )
-            }
-        }
-
-        //Bottom Light -----------------------------------------------------------------------------
-        if (isSelected) {
-            Column(
-                modifier = Modifier
-                    .size(iconSize.dp)
-                    .padding(bottom = 1.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom, )
-            {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .height(1.dp)
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color(0xFF62AE29).copy(0.3f),
-                                    Color(0xFF62AE29),
-                                    Color(0xFF62AE29).copy(0.3f),
-                                    Color.Transparent,
-                                )
-                            )
-                        )
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun WalletWiseFloatingBottomBar(
-    selectedTab: Int,
-    onTabSelected: (Int) -> Unit, )
-{
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
-
-    //Max Width x 0.06Height
-    Box(
-        modifier = Modifier
-            .height((screenHeight * 0.06).dp)
-            .fillMaxWidth(fraction = 0.96f)
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF9EE9D8).copy(alpha = 0.3f),
-                        Color(0xFF91E9CF).copy(alpha = 0.3f),
-                    )
-                ),
-                shape = CircleShape,
-            )
-            .clip(CircleShape),
-        contentAlignment = Alignment.Center, )
-    {
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .clip(CircleShape)
-                .background(Color.White.copy(alpha = 0.0f))
-                .border(
-                    width = 1.dp,
-                    color = Color(0xFF196B52).copy(0.5f),
-                    shape = CircleShape
-                )
-                .padding(8.dp),
-        )
-
-        Row(
-            modifier = Modifier.matchParentSize(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically, )
-        {
-            //OVERVIEW: 1
-            GlassButtonFloatingBottomBar(
-                icon = Icons.Default.Menu,
-                title = "Overview",
-                contentDescription = "Overview",
-                isSelected = selectedTab == 1,
-                onClick = {
-                    onTabSelected(1)
-                }
-            )
-            //HOME: 0
-            GlassButtonFloatingBottomBar(
-                icon = Icons.Default.Home,
-                title = "Home",
-                contentDescription = "Home",
-                isSelected = selectedTab == 0,
-                onClick = {
-                    onTabSelected(0)
-                }
-            )
-            //SETTINGS: 2
-            GlassButtonFloatingBottomBar(
-                icon = Icons.Default.Settings,
-                title = "Settings",
-                contentDescription = "Settings",
-                isSelected = selectedTab == 2,
-                onClick = {
-                    onTabSelected(2)
-                }
-            )
-        }
-    }
-    Spacer(modifier = Modifier.height(4.dp).fillMaxWidth())
 }
 
