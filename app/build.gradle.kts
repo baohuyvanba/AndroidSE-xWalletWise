@@ -2,13 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kapt)
     alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.android.tyzen.xwalletwise"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.android.tyzen.xwalletwise"
@@ -63,7 +62,7 @@ dependencies {
     implementation(libs.hilt.android.core)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     //Graphic
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)

@@ -86,14 +86,14 @@ class WalletWiseActivity : AppCompatActivity() {
         setContent {
             requestCameraPermission()
             WalletWiseTheme {
-                WalletWise()
+                XWalletWise()
             }
         }
     }
 }
 
 @Composable
-fun WalletWise()
+fun XWalletWise()
 {
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
