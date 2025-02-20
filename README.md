@@ -1,5 +1,13 @@
 # xWalletWise - A Personal Finance Tracker
 
+<table>
+  <tr>
+    <td><img src="Screenshots/Application Pin.png" width="200"></td>
+    <td><img src="Screenshots/Main.png" width="200"></td>
+    <td><img src="Screenshots/Welcome Screen.png" width="200"></td>
+  </tr>
+</table>
+
 ## Description
 WalletWise is a personal finance management application built with Kotlin and Jetpack Compose. It aims to help users track their income and expenses, set budgets, and generate reports. This project serves as a learning experience for exploring modern Android development concepts and practices.
 
