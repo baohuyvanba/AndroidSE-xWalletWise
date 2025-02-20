@@ -2,9 +2,9 @@
 
 <table>
   <tr>
+    <td><img src="Screenshots/Welcome Screen.png" width="200"></td>
     <td><img src="Screenshots/Application Pin.png" width="200"></td>
     <td><img src="Screenshots/Main.png" width="200"></td>
-    <td><img src="Screenshots/Welcome Screen.png" width="200"></td>
   </tr>
 </table>
 
