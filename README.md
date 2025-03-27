@@ -2,9 +2,9 @@
 
 <table>
   <tr>
-    <td><img src="Screenshots/Welcome Screen.png" width="200"></td>
-    <td><img src="Screenshots/Application Pin.png" width="200"></td>
-    <td><img src="Screenshots/Main.png" width="200"></td>
+    <td><img src="attachments/Welcome Screen.png" width="200"></td>
+    <td><img src="attachments/Application Pin.png" width="200"></td>
+    <td><img src="attachments/Main.png" width="200"></td>
   </tr>
 </table>
 
@@ -29,6 +29,8 @@ This project is an extension of a previous group project completed for a univers
 
 ## Architecture
 This project follows a MVVM architecture to separate concerns and improve maintainability.
+
+![](./attachments/MVVM.png)
 
 ## Additional Information
 This project is still under development. New features and improvements are continuously being added.
