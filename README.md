@@ -43,6 +43,11 @@ This project follows a MVVM architecture to separate concerns and improve mainta
 
 ![](./attachments/MVVM.png)
 
+For example, to build a Category List Screen, MVVM will includes:
+<p align="center">
+  <img src="attachments/MVVM Example.jpg" alt="xWalletWise MVVM arch example">
+</p>
+
 ## Project Structure
 The app is organized around a Compose-first, MVVM setup with a single-Activity entry, a root composable, a main `Scaffold` layout, and a Navigation Host that control all screens's navigations.
 
