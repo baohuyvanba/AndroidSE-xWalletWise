@@ -4,10 +4,10 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
@@ -16,6 +16,14 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+
+@Immutable
+data class ExtendedColorScheme(
+    val outcome: ColorFamily,
+    val income: ColorFamily,
+    val saving: ColorFamily,
+    val materialGray: ColorFamily,
+)
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -245,6 +253,168 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+val extendedLight = ExtendedColorScheme(
+    outcome = ColorFamily(
+        outcomeLight,
+        onOutcomeLight,
+        outcomeContainerLight,
+        onOutcomeContainerLight,
+    ),
+    income = ColorFamily(
+        incomeLight,
+        onIncomeLight,
+        incomeContainerLight,
+        onIncomeContainerLight,
+    ),
+    saving = ColorFamily(
+        savingLight,
+        onSavingLight,
+        savingContainerLight,
+        onSavingContainerLight,
+    ),
+    materialGray = ColorFamily(
+        materialGrayLight,
+        onMaterialGrayLight,
+        materialGrayContainerLight,
+        onMaterialGrayContainerLight,
+    ),
+)
+
+val extendedDark = ExtendedColorScheme(
+    outcome = ColorFamily(
+        outcomeDark,
+        onOutcomeDark,
+        outcomeContainerDark,
+        onOutcomeContainerDark,
+    ),
+    income = ColorFamily(
+        incomeDark,
+        onIncomeDark,
+        incomeContainerDark,
+        onIncomeContainerDark,
+    ),
+    saving = ColorFamily(
+        savingDark,
+        onSavingDark,
+        savingContainerDark,
+        onSavingContainerDark,
+    ),
+    materialGray = ColorFamily(
+        materialGrayDark,
+        onMaterialGrayDark,
+        materialGrayContainerDark,
+        onMaterialGrayContainerDark,
+    ),
+)
+
+val extendedLightMediumContrast = ExtendedColorScheme(
+    outcome = ColorFamily(
+        outcomeLightMediumContrast,
+        onOutcomeLightMediumContrast,
+        outcomeContainerLightMediumContrast,
+        onOutcomeContainerLightMediumContrast,
+    ),
+    income = ColorFamily(
+        incomeLightMediumContrast,
+        onIncomeLightMediumContrast,
+        incomeContainerLightMediumContrast,
+        onIncomeContainerLightMediumContrast,
+    ),
+    saving = ColorFamily(
+        savingLightMediumContrast,
+        onSavingLightMediumContrast,
+        savingContainerLightMediumContrast,
+        onSavingContainerLightMediumContrast,
+    ),
+    materialGray = ColorFamily(
+        materialGrayLightMediumContrast,
+        onMaterialGrayLightMediumContrast,
+        materialGrayContainerLightMediumContrast,
+        onMaterialGrayContainerLightMediumContrast,
+    ),
+)
+
+val extendedLightHighContrast = ExtendedColorScheme(
+    outcome = ColorFamily(
+        outcomeLightHighContrast,
+        onOutcomeLightHighContrast,
+        outcomeContainerLightHighContrast,
+        onOutcomeContainerLightHighContrast,
+    ),
+    income = ColorFamily(
+        incomeLightHighContrast,
+        onIncomeLightHighContrast,
+        incomeContainerLightHighContrast,
+        onIncomeContainerLightHighContrast,
+    ),
+    saving = ColorFamily(
+        savingLightHighContrast,
+        onSavingLightHighContrast,
+        savingContainerLightHighContrast,
+        onSavingContainerLightHighContrast,
+    ),
+    materialGray = ColorFamily(
+        materialGrayLightHighContrast,
+        onMaterialGrayLightHighContrast,
+        materialGrayContainerLightHighContrast,
+        onMaterialGrayContainerLightHighContrast,
+    ),
+)
+
+val extendedDarkMediumContrast = ExtendedColorScheme(
+    outcome = ColorFamily(
+        outcomeDarkMediumContrast,
+        onOutcomeDarkMediumContrast,
+        outcomeContainerDarkMediumContrast,
+        onOutcomeContainerDarkMediumContrast,
+    ),
+    income = ColorFamily(
+        incomeDarkMediumContrast,
+        onIncomeDarkMediumContrast,
+        incomeContainerDarkMediumContrast,
+        onIncomeContainerDarkMediumContrast,
+    ),
+    saving = ColorFamily(
+        savingDarkMediumContrast,
+        onSavingDarkMediumContrast,
+        savingContainerDarkMediumContrast,
+        onSavingContainerDarkMediumContrast,
+    ),
+    materialGray = ColorFamily(
+        materialGrayDarkMediumContrast,
+        onMaterialGrayDarkMediumContrast,
+        materialGrayContainerDarkMediumContrast,
+        onMaterialGrayContainerDarkMediumContrast,
+    ),
+)
+
+val extendedDarkHighContrast = ExtendedColorScheme(
+    outcome = ColorFamily(
+        outcomeDarkHighContrast,
+        onOutcomeDarkHighContrast,
+        outcomeContainerDarkHighContrast,
+        onOutcomeContainerDarkHighContrast,
+    ),
+    income = ColorFamily(
+        incomeDarkHighContrast,
+        onIncomeDarkHighContrast,
+        incomeContainerDarkHighContrast,
+        onIncomeContainerDarkHighContrast,
+    ),
+    saving = ColorFamily(
+        savingDarkHighContrast,
+        onSavingDarkHighContrast,
+        savingContainerDarkHighContrast,
+        onSavingContainerDarkHighContrast,
+    ),
+    materialGray = ColorFamily(
+        materialGrayDarkHighContrast,
+        onMaterialGrayDarkHighContrast,
+        materialGrayContainerDarkHighContrast,
+        onMaterialGrayContainerDarkHighContrast,
+    ),
+)
+
 @Immutable
 data class ColorFamily(
     val color: Color,
@@ -260,16 +430,14 @@ val unspecified_scheme = ColorFamily(
 @Composable
 fun WalletWiseTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
-    content: @Composable() () -> Unit, )
-{
+    // Dynamic color is available on Android 12+
+    dynamicColor: Boolean = true,
+    content: @Composable() () -> Unit
+) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme)
-                dynamicDarkColorScheme(context)
-            else
-                dynamicLightColorScheme(context)
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
         darkTheme -> darkScheme
@@ -290,4 +458,3 @@ fun WalletWiseTheme(
         content = content
     )
 }
-

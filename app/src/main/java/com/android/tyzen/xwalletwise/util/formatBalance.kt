@@ -8,7 +8,7 @@ fun formatBalance(balance: Double): String
 {
     val symbols = DecimalFormatSymbols(Locale.getDefault())
     symbols.groupingSeparator = '.'
-    symbols.decimalSeparator = ','
+    symbols.decimalSeparator  = ','
 
     val formatter = DecimalFormat("#,##0.##", symbols) // Use #.## to optionally display decimals
 

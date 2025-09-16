@@ -37,13 +37,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 import com.android.tyzen.xwalletwise.ui.fragment.WalletWiseFloatingBottomBar
-import com.android.tyzen.xwalletwise.ui.fragment.WalletWiseFloatingTopBar
+import com.android.tyzen.xwalletwise.ui.fragment.WalletWiseMainTopBar
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 //START POINT
 @AndroidEntryPoint
 class WalletWiseActivity : AppCompatActivity() {
+
     //PERMISSION Request
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission(), )
@@ -51,7 +52,7 @@ class WalletWiseActivity : AppCompatActivity() {
         if (isGranted) {
             Log.e("Permission", "Granted")
         } else {
-            Log.e("Permission", "Den ied")
+            Log.e("Permission", "Denied")
         }
     }
     private fun requestCameraPermission() {
@@ -60,7 +61,7 @@ class WalletWiseActivity : AppCompatActivity() {
                 this,
                 android.Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
-                Log.e("Permission", "Was Previously granted")
+                Log.e("Permission", "was previously granted")
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
@@ -70,7 +71,7 @@ class WalletWiseActivity : AppCompatActivity() {
         }
     }
 
-    //ON CREATE APPLICATION
+    //ON-CREATE APPLICATION
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -98,8 +99,9 @@ fun XWalletWise()
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     var currentDestination = currentBackStack?.destination?.route
+
     val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp
+    val screenHeight  = configuration.screenHeightDp
 
     /**
      * Application Bars Types ==================================================================
@@ -158,7 +160,7 @@ fun XWalletWise()
                 verticalArrangement = Arrangement.Top, )
             {
                 when (barsType) {
-                    0 -> WalletWiseFloatingTopBar(
+                    0 -> WalletWiseMainTopBar(
                         showActionButton = true,
                         onActionClick = { /*TODO*/ },
                     )

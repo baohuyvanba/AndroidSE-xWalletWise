@@ -3,7 +3,6 @@ package com.android.tyzen.xwalletwise
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseInOutQuad
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
@@ -11,14 +10,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 
-import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -41,7 +37,6 @@ import com.android.tyzen.xwalletwise.ui.activity.user.ProfileSetupScreen
 import com.android.tyzen.xwalletwise.ui.activity.sercurity.SetupPinScreen
 import com.android.tyzen.xwalletwise.ui.activity.user.WelcomeScreen
 
-//APPLICATION NAVIGATION
 @Composable
 fun WalletWiseNavHost(
     navController: NavHostController, )

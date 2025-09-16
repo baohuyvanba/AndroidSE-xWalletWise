@@ -1,5 +1,10 @@
 # xWalletWise - A Personal Finance Tracker
 
+![Kotlin](https://img.shields.io/badge/Kotlin-Android-blue)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack-Compose-7952B3)
+![Architecture](https://img.shields.io/badge/Arch-MVVM-green)
+![Status](https://img.shields.io/badge/Status-Work_in_Progress-orange)
+
 <table>
   <tr>
     <td><img src="attachments/Welcome Screen.png" width="200"></td>

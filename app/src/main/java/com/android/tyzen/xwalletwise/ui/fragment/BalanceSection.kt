@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
+import com.android.tyzen.xwalletwise.ui.theme.incomeLight
+import com.android.tyzen.xwalletwise.ui.theme.outcomeLight
 import com.android.tyzen.xwalletwise.util.formatBalance
 
 //PREVIEW ONLY -------------------------------------------------------------------------------------
@@ -183,6 +185,7 @@ fun BalanceBox(
     label: String,
     icon: ImageVector,
     textColor: Color,
+    iconColor: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier, )
 {
@@ -194,7 +197,10 @@ fun BalanceBox(
         Box(
             modifier = Modifier
                 .fillMaxWidth().wrapContentHeight()
-                .background(Color.White.copy(alpha = 0.1f))
+                .background(
+                    color = Color.White.copy(alpha = 0.1f),
+                    shape = RoundedCornerShape(16.dp),
+                )
                 .border(
                     width = 1.dp,
                     color = Color.White.copy(alpha = 0.2f),
@@ -215,14 +221,14 @@ fun BalanceBox(
                     Icon(
                         imageVector = icon,
                         contentDescription = label,
-                        tint = Color.White, )
+                        tint = iconColor, )
 
                     Spacer(modifier = Modifier.width(4.dp))
 
                     Text(
                         text = label,
                         style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         ),
                         color = textColor, )
                 }
@@ -242,13 +248,13 @@ fun BalanceBox(
 /**
  * DETAILED SECTION ================================================================================
  */
-@Preview(showBackground = true)
+@Preview(showBackground = false)
 @Composable
 fun PreviewDetailedBalanceSection() {
     WalletWiseTheme {
         DetailedBalanceSection(
-            incomeAmount = 10000000.0,
-            outcomeAmount = 500000.0,
+            incomeAmount = 1000000000.0,
+            outcomeAmount = 50000000.0,
             onIncomeClick = {},
             onOutcomeClick = {}, )
     }
@@ -273,6 +279,7 @@ fun DetailedBalanceSection(
             label = "Income",
             icon = Icons.Default.KeyboardArrowDown,
             textColor = Color.White,
+            iconColor = incomeLight,
             modifier = Modifier.weight(1f),
             onClick = onIncomeClick
         )
@@ -285,6 +292,7 @@ fun DetailedBalanceSection(
             label = "Expense",
             icon = Icons.Default.KeyboardArrowUp,
             textColor = Color.White,
+            iconColor = outcomeLight,
             modifier = Modifier.weight(1f),
             onClick = onOutcomeClick
         )

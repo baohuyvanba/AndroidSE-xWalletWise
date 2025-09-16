@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 
 import com.android.tyzen.xwalletwise.R
 import com.android.tyzen.xwalletwise.ui.theme.WalletWiseTheme
+import com.android.tyzen.xwalletwise.ui.theme.secondaryContainerLight
 
 @Preview(showBackground = true)
 @Composable
@@ -66,14 +68,14 @@ fun PreviewWalletWiseAppBar() {
                 title = "WalletWise",
                 useIconForTitle = false,
                 showNavigationButton = true,
-                navigationIcon = Icons.Default.ArrowBack,
+                navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
                 showActionButton = false,
                 onNavigationClick = { /*TODO*/ },
             )
 
             Spacer(modifier = Modifier.height(16.dp).fillMaxWidth().background(Color.Black).padding(16.dp))
 
-            WalletWiseFloatingTopBar(
+            WalletWiseMainTopBar(
                 showActionButton = true,
             )
 
@@ -199,7 +201,7 @@ fun WalletWiseBottomBar(
         //EXPENSE LIST
         NavigationBarItem(
             icon = {
-                Icon(Icons.Default.List,
+                Icon(Icons.AutoMirrored.Filled.List,
                     contentDescription = "Expense List")
             },
             selected = selectedTab == 1,
@@ -245,7 +247,7 @@ fun WalletWiseBottomBar(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WalletWiseFloatingTopBar(
+fun WalletWiseMainTopBar(
     showActionButton: Boolean = true,
     actionButton: @Composable() (() -> Unit)? = null,
     onActionClick: () -> Unit = {}, )
@@ -258,14 +260,12 @@ fun WalletWiseFloatingTopBar(
         modifier = Modifier
             .height((screenHeight * 0.05).dp)
             .fillMaxWidth()
-            .background(brush =
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFc7e1fc).copy(alpha = 0.8f),
-                        Color(0xFF6be5ba).copy(alpha = 0.8f),
-                    )
+            .background(brush = Brush.verticalGradient(
+                colors = listOf(
+                    secondaryContainerLight,
+                    secondaryContainerLight,
                 )
-            ),
+            )),
     ) {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
